@@ -25,11 +25,11 @@ def download_data():
         print("Data already exists.")
 
 def load_and_preprocess_data():
-    """Loads and preprocesses the dataset."""
+    """Loads and preprocesses the dataset - using only numeric features."""
     df = pd.read_csv(DATA_PATH)
     
-    # Basic preprocessing for simplicity in this example
-    df = df.drop(['customerID'], axis=1)
+    # Select only the 3 numeric features we need for prediction
+    df = df[['tenure', 'MonthlyCharges', 'TotalCharges', 'Churn']]
     
     # Convert TotalCharges to numeric, coercing errors to NaN, then drop NaNs
     df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
@@ -38,14 +38,17 @@ def load_and_preprocess_data():
     # Convert target variable to binary
     df['Churn'] = df['Churn'].map({'Yes': 1, 'No': 0})
     
-    # One-hot encode categorical variables
-    df = pd.get_dummies(df, drop_first=True)
+    # Standardize column names for consistency
+    df.columns = ['tenure', 'monthly_charges', 'total_charges', 'Churn']
     
-    X = df.drop('Churn', axis=1)
+    X = df[['tenure', 'monthly_charges', 'total_charges']]
     y = df['Churn']
     
     # Keep track of feature names for the API
     feature_names = X.columns.tolist()
+    
+    print(f"Features: {feature_names}")
+    print(f"Total samples: {len(X)}")
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
