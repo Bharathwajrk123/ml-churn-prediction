@@ -390,9 +390,11 @@ def home():
 
                 try {
                     const payload = {
-                        tenure,
-                        monthly_charges: monthlyCharges,
-                        total_charges: totalCharges
+                        features: {
+                            tenure: tenure,
+                            monthly_charges: monthlyCharges,
+                            total_charges: totalCharges
+                        }
                     };
 
                     const response = await fetch('/predict', {
