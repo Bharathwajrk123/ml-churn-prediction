@@ -26,9 +26,10 @@ RUN pip install -r requirements.txt
 
 # Copy the project files
 COPY src/ /app/src/
+COPY models/ /app/models/
 
 # Create directories for logs, data, and models
-RUN mkdir -p /app/logs /app/data /app/models /app/mlruns
+RUN mkdir -p /app/logs /app/data /app/mlruns
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
