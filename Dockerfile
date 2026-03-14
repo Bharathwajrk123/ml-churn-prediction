@@ -33,10 +33,10 @@ RUN mkdir -p /app/logs /app/data /app/mlruns
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import requests; requests.get('http://localhost:8000/health')" || exit 1
+    CMD python -c "import requests; requests.get('http://localhost:${PORT:-8000}/health')" || exit 1
 
 # Expose the API port
 EXPOSE 8000
 
-# Run the FastAPI application
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run the FastAPI application (uses PORT env var from Railway, defaults to 8000)
+CMD uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8000}
