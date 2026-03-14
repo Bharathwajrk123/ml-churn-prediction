@@ -77,7 +77,31 @@ def predict(request: ChurnPredictionRequest):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+@app.get("/")
+def home():
+    """Root endpoint - API information."""
+    return {
+        "message": "ML Churn Prediction API is running",
+        "version": "1.0.0",
+        "docs_url": "/docs",
+        "endpoints": {
+            "POST /predict": "Make a churn prediction",
+            "GET /health": "Health check",
+            "GET /version": "API and model version info"
+        }
+    }
+
 @app.get("/health")
 def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "model_loaded": model is not None}
+
+@app.get("/version")
+def version_info():
+    """API version and model information."""
+    return {
+        "model_version": "1.0",
+        "api_version": "1.0.0",
+        "model_name": "Random Forest Classifier",
+        "dataset": "Telco Customer Churn"
+    }
